@@ -1,0 +1,125 @@
+/* Generated Code (IMPORT) */
+/* Source File: Tellurium Resources.xlsx */
+/* Source Path: /home/u47562695/sasuser.v94 */
+/* Code generated on: 9/9/23, 8:15 PM */
+
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/home/u47562695/sasuser.v94/Tellurium Resources.xlsx';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=XLSX
+	OUT=WORK.IMPORT;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+
+
+
+
+
+
+
+/* Create a dataset with grading values for Tellurium and Copper */
+data GradingData;
+    input Material $ GradingValue;
+    datalines;
+Tellurium 0.0412
+Copper 0.447
+Tellurium 0.033
+Copper 0.076
+Tellurium 0.156
+Copper 0..392
+;
+run;
+
+/* Perform a two-sample t-test */
+proc ttest data=GradingData;
+    class Material;
+    var GradingValue;
+    title 'Two-Sample T-Test for Grading Values of Tellurium vs. Copper';
+run;
+
+
+
+/* Create a dataset with age data for the Tellurium mine */
+data MineAgeData;
+    input Age;
+    datalines;
+92
+91
+93
+
+;
+run;
+
+/* Set the null hypothesis mean */
+%let NullMean = 70;
+
+/* Perform a one-sample t-test */
+proc ttest data=MineAgeData h0=&NullMean;
+    var Age;
+    title 'One-Sample T-Test for Average Age of Tellurium Mine';
+run;
+
+/* Generated Code (IMPORT) */
+/* Source File: Tellurium_production.xlsx */
+/* Source Path: /home/u47562695/sasuser.v94 */
+/* Code generated on: 9/9/23, 8:18 PM */
+
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/home/u47562695/sasuser.v94/Tellurium_production.xlsx';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=XLSX
+	OUT=WORK.IMPORT;
+	GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+
+
+
+
+
+
+
+/* Create a dataset with the weight of Tellurium */
+data WeightData;
+    input Material $ Weight;
+    datalines;
+tellurium 107.619111
+Population 1476179.624
+;
+run;
+
+/* Specify the population mean for comparison */
+%let PopulationMean = 1476179.62;
+
+/* Specify the null hypothesis in the DATA step */
+data WeightData;
+    set WeightData;
+    h0 = &PopulationMean;
+run;
+
+/* Perform the two-sample t-test */
+proc ttest data=WeightData;
+   class Material;
+    var Weight;
+    title 'Two-Sample T-Test for Tellurium vs. Average Weight';
+run;
+
+
+
+
+
